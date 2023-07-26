@@ -26,17 +26,12 @@ export const POST = async (req: Request) => {
       return new NextResponse("Messages are required", { status: 400 });
     }
 
-    // const response = await openai.createChatCompletion({
-    //   model: "gpt-3.5-turbo",
-    //   messages
-    // });
-
-    // return NextResponse.json(response.data.choices[0].message);
-    return NextResponse.json({
-      content: 'Message from open AI' + new Date(),
-      role: 'assistant'
+    const response = await openai.createChatCompletion({
+      model: "gpt-3.5-turbo",
+      messages
     });
 
+    return NextResponse.json(response.data.choices[0].message);
   } catch (e) {
     console.log('\x1b[33m%s\x1b[0m', 'CONVERSATION_ERROR', (e as unknown as Error).message);
     return new NextResponse('Internal error', { status: 500 });
