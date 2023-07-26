@@ -33,7 +33,7 @@ export const POST = async (req: Request) => {
 
     return NextResponse.json(response.data.choices[0].message);
   } catch (e) {
-    console.log('\x1b[33m%s\x1b[0m', 'CONVERSATION_ERROR', (e as unknown as Error).message);
+    console.log('\x1b[33m%s\x1b[0m', 'CONVERSATION_ERROR', (e as Error).message);
     return new NextResponse('Internal error', { status: 500 });
   }
 };
