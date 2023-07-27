@@ -2,6 +2,8 @@ import { Configuration, OpenAIApi } from 'openai';
 import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs';
 
+import { checkApiLimit, incrementApiLimit } from '@/lib/api-limit';
+
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY
 });
@@ -15,21 +17,28 @@ export const POST = async (req: Request) => {
     const { messages } = body;
 
     if (!userId) {
-      return new NextResponse('Unauthorized', {status: 401});
+      return new NextResponse('Unauthorized', { status: 401 });
     }
 
     if (!configuration.apiKey) {
-      return new NextResponse("OpenAI API Key not configured.", { status: 500 });
+      return new NextResponse('OpenAI API Key not configured.', { status: 500 });
     }
 
     if (!messages) {
-      return new NextResponse("Messages are required", { status: 400 });
+      return new NextResponse('Messages are required', { status: 400 });
+    }
+
+    const freeTrial = await checkApiLimit();
+    if (!freeTrial) {
+      return new NextResponse('Free trial has expired', { status: 403 });
     }
 
     const response = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo",
+      model: 'gpt-3.5-turbo',
       messages
     });
+
+    await incrementApiLimit();
 
     return NextResponse.json(response.data.choices[0].message);
   } catch (e) {
