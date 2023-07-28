@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { MessageSquare } from 'lucide-react';
 import { ChatCompletionRequestMessage } from 'openai';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { toast } from "react-hot-toast";
+import { toast } from 'react-hot-toast';
 import axios, { isAxiosError } from 'axios';
 import * as z from 'zod';
 
