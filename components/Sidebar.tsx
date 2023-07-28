@@ -68,7 +68,7 @@ interface SidebarProps {
   isPro: boolean;
 }
 
-const Sidebar = ({ apiLimitCount = 0, isPro = false }: SidebarProps) => {
+export const Sidebar = ({ apiLimitCount = 0, isPro = false }: SidebarProps) => {
   const pathname = usePathname();
 
   return (
@@ -102,5 +102,3 @@ const Sidebar = ({ apiLimitCount = 0, isPro = false }: SidebarProps) => {
     </div>
   );
 };
-
-export default Sidebar;

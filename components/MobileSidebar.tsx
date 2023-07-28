@@ -1,11 +1,11 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { Menu } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import Sidebar from '@/components/Sidebar';
-import { useEffect, useState } from 'react';
+import { Sidebar } from '@/components/Sidebar';
 
 interface MobileSidebarProps {
   apiLimitCount: number;
