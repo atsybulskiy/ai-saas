@@ -1,6 +1,12 @@
 'use client';
 
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle
+} from '@/components/ui/dialog';
 import { useProModal } from '@/hooks/use-pro-modal';
 import { Badge } from '@/components/ui/badge';
 import { tools } from '@/constants';

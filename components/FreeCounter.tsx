@@ -15,7 +15,7 @@ interface FreeCounterProps {
 }
 
 const FreeCounter = ({ apiLimitCount }: FreeCounterProps) => {
-  const {onOpen} = useProModal();
+  const { onOpen } = useProModal();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
