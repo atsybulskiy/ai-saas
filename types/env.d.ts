@@ -12,5 +12,6 @@ namespace NodeJS {
     STRIPE_API_KEY: string;
     STRIPE_WEBHOOK_SECRET: string;
     NEXT_PUBLIC_APP_URL: string;
+    NEXT_PUBLIC_CRISP_WEBSITE_ID: string;
   }
 }

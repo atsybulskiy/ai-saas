@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { Code } from 'lucide-react';
 import { ChatCompletionRequestMessage } from 'openai';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { toast } from 'react-hot-toast';
 import ReactMarkdown from 'react-markdown';
 import axios, { isAxiosError } from 'axios';
 import * as z from 'zod';
@@ -48,6 +49,8 @@ const CodePage = () => {
     } catch (e: unknown) {
       if (isAxiosError(e) && e.response?.status === 403) {
         onOpen();
+      } else {
+        toast.error('Something went wrong.');
       }
     } finally {
       router.refresh();

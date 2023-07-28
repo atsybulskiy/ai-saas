@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Check, Zap } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 import axios from 'axios';
 
 import { cn } from '@/lib/utils';
@@ -18,7 +19,7 @@ import { tools } from '@/constants';
 
 export const ProModal = () => {
   const [loading, setLoading] = useState(false);
-  const { isOpen, onOpen, onClose } = useProModal();
+  const { isOpen, onClose } = useProModal();
 
   const onSubscribe = async () => {
     try {
@@ -27,7 +28,7 @@ export const ProModal = () => {
 
       window.location.href = (await response).data.url;
     } catch (e) {
-      console.log(e, 'STRIPE_CLIENT_ERROR');
+      toast.error('Something went wrong.');
     } finally {
       setLoading(false);
     }
@@ -63,7 +64,7 @@ export const ProModal = () => {
           </div>
         </DialogHeader>
         <DialogFooter>
-          <Button size="lg" variant="premium" className="w-full" onClick={onSubscribe}>
+          <Button disabled={loading} size="lg" variant="premium" className="w-full" onClick={onSubscribe}>
             Upgrade
             <Zap className="w-4 h-4 ml-2 fill-white" />
           </Button>

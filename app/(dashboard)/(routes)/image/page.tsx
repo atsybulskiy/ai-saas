@@ -5,9 +5,10 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import Image from 'next/image';
 import { Download, ImageIcon } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
 import axios, { isAxiosError } from 'axios';
+import * as z from 'zod';
 
 import {
   Button,
@@ -58,6 +59,8 @@ const ImagePage = () => {
     } catch (e: unknown) {
       if (isAxiosError(e) && e.response?.status === 403) {
         onOpen();
+      } else {
+        toast.error('Something went wrong.');
       }
     } finally {
       router.refresh();

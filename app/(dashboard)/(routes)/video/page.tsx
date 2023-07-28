@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { VideoIcon } from 'lucide-react';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { toast } from 'react-hot-toast';
 
 import { Button, Form, FormControl, FormField, FormItem, Input } from '@/components/ui';
 import { Heading } from '@/components/Heading';
@@ -41,6 +42,8 @@ const VideoPage = () => {
     } catch (e: unknown) {
       if (isAxiosError(e) && e.response?.status === 403) {
         onOpen();
+      } else {
+        toast.error('Something went wrong.');
       }
     } finally {
       router.refresh();

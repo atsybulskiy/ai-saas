@@ -6,8 +6,9 @@ import { useForm } from 'react-hook-form';
 import { MessageSquare } from 'lucide-react';
 import { ChatCompletionRequestMessage } from 'openai';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
+import { toast } from "react-hot-toast";
 import axios, { isAxiosError } from 'axios';
+import * as z from 'zod';
 
 import { Button, Form, FormControl, FormField, FormItem, Input } from '@/components/ui';
 import { Heading } from '@/components/Heading';
@@ -44,8 +45,9 @@ const ConversationPage = () => {
       form.reset();
     } catch (e: unknown) {
       if (isAxiosError(e) && e.response?.status === 403) {
-        console.log(e.response?.status);
         onOpen();
+      } else {
+        toast.error('Something went wrong.');
       }
     } finally {
       router.refresh();
