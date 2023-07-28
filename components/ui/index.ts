@@ -8,6 +8,8 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
+import { Card } from '@/components/ui/card';
 
 export {
   Input,
@@ -20,5 +22,7 @@ export {
   SelectItem,
   SelectTrigger,
   SelectContent,
-  SelectValue
+  SelectValue,
+  Badge,
+  Card
 };

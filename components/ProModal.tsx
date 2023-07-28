@@ -1,5 +1,10 @@
 'use client';
 
+import { useState } from 'react';
+import { Check, Zap } from 'lucide-react';
+import axios from 'axios';
+
+import { cn } from '@/lib/utils';
 import {
   Dialog,
   DialogContent,
@@ -7,17 +12,26 @@ import {
   DialogHeader,
   DialogTitle
 } from '@/components/ui/dialog';
+import { Badge, Button, Card } from '@/components/ui';
 import { useProModal } from '@/hooks/use-pro-modal';
-import { Badge } from '@/components/ui/badge';
 import { tools } from '@/constants';
-import { Card } from '@/components/ui/card';
-import { cn } from '@/lib/utils';
-import { Check, Zap } from 'lucide-react';
-import { DialogBody } from 'next/dist/client/components/react-dev-overlay/internal/components/Dialog';
-import { Button } from '@/components/ui';
 
 export const ProModal = () => {
+  const [loading, setLoading] = useState(false);
   const { isOpen, onOpen, onClose } = useProModal();
+
+  const onSubscribe = async () => {
+    try {
+      setLoading(true);
+      const response = axios.get('/api/stripe');
+
+      window.location.href = (await response).data.url;
+    } catch (e) {
+      console.log(e, 'STRIPE_CLIENT_ERROR');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -31,7 +45,7 @@ export const ProModal = () => {
               </Badge>
             </div>
           </DialogTitle>
-          <DialogBody className="text-center pt-2 space-y-2 text-zinc-900 font-medium">
+          <div className="text-center pt-2 space-y-2 text-zinc-900 font-medium">
             {tools.map((tool) => (
               <Card
                 key={tool.label}
@@ -46,10 +60,10 @@ export const ProModal = () => {
                 <Check className="text-primary w-5 h-5" />
               </Card>
             ))}
-          </DialogBody>
+          </div>
         </DialogHeader>
         <DialogFooter>
-          <Button size="lg" variant="premium" className="w-full">
+          <Button size="lg" variant="premium" className="w-full" onClick={onSubscribe}>
             Upgrade
             <Zap className="w-4 h-4 ml-2 fill-white" />
           </Button>

@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs';
 
 import { checkApiLimit, incrementApiLimit } from '@/lib/api-limit';
+import { checkSubscription } from '@/lib/subscription';
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY
@@ -37,7 +38,9 @@ export const POST = async (req: Request) => {
     }
 
     const freeTrial = await checkApiLimit();
-    if (!freeTrial) {
+    const isPro = await checkSubscription();
+
+    if (!freeTrial && !isPro) {
       return new NextResponse('Free trial has expired', { status: 403 });
     }
 
@@ -47,7 +50,9 @@ export const POST = async (req: Request) => {
       size: resolution
     });
 
-    await incrementApiLimit();
+    if (!isPro) {
+      await incrementApiLimit();
+    }
 
     return NextResponse.json(response.data.data);
   } catch (e) {
