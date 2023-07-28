@@ -1,22 +1,26 @@
-import './globals.scss'
-import type {Metadata} from 'next'
-import {Inter} from 'next/font/google'
-import {ReactNode} from 'react'
-import {ClerkProvider} from '@clerk/nextjs'
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import { ClerkProvider } from '@clerk/nextjs';
 
-const inter = Inter({subsets: ['latin']})
+import './globals.scss';
+import { ModalProvider } from '@/components/providers/ModalProvider';
+
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Genius',
   description: 'AI Platform'
-}
+};
 
-export default function RootLayout({children}: { children: ReactNode }) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <ClerkProvider>
       <html lang="en">
-      <body className={inter.className}>{children}</body>
+        <body className={inter.className}>
+          <ModalProvider />
+          {children}
+        </body>
       </html>
     </ClerkProvider>
-  )
+  );
 }

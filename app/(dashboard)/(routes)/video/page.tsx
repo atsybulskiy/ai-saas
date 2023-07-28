@@ -1,7 +1,7 @@
 'use client';
 
 import * as z from 'zod';
-import axios from 'axios';
+import axios, { isAxiosError } from 'axios';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
@@ -12,12 +12,15 @@ import { Button, Form, FormControl, FormField, FormItem, Input } from '@/compone
 import { Heading } from '@/components/Heading';
 import { Empty } from '@/components/Empty';
 import { Loader } from '@/components/Loader';
+import { useProModal } from '@/hooks/use-pro-modal';
 
 import styles from './video.module.scss';
+
 import { formSchema } from './constants';
 
 const VideoPage = () => {
   const router = useRouter();
+  const { onOpen } = useProModal();
   const [video, setVideo] = useState<string>();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -30,13 +33,15 @@ const VideoPage = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      setVideo(undefined)
+      setVideo(undefined);
       const response = await axios.post('/api/video', values);
 
       setVideo(response.data[0]);
       form.reset();
-    } catch (e: any) {
-      console.log('%c⇒ error', 'color: #FF5370', e);
+    } catch (e: unknown) {
+      if (isAxiosError(e) && e.response?.status === 403) {
+        onOpen();
+      }
     } finally {
       router.refresh();
     }
@@ -52,47 +57,37 @@ const VideoPage = () => {
         bgColor="bg-orange-500/10"
       />
       <div className="px-4 lg:px-8">
-        <div>
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className={styles.form}
-            >
-              <FormField
-                name="prompt"
-                render={({ field }) => (
-                  <FormItem className="col-span-12 lg:col-span-10">
-                    <FormControl className="m-0 p-0">
-                      <Input
-                        className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent"
-                        disabled={isLoading}
-                        placeholder="Clown fish swimming in a coral reef"
-                        {...field}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <Button
-                className="col-span-12 lg:col-span-2 w-full"
-                type="submit"
-                disabled={isLoading}
-                size="icon"
-              >
-                Generate
-              </Button>
-            </form>
-          </Form>
-        </div>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className={styles.form}>
+            <FormField
+              name="prompt"
+              render={({ field }) => (
+                <FormItem className="col-span-12 lg:col-span-10">
+                  <FormControl className="m-0 p-0">
+                    <Input
+                      className={styles.input}
+                      disabled={isLoading}
+                      placeholder="Clown fish swimming in a coral reef"
+                      {...field}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <Button className={styles.button} type="submit" disabled={isLoading} size="icon">
+              Generate
+            </Button>
+          </form>
+        </Form>
         <div className="space-y-4 mt-4">
           {isLoading && (
-            <div className="p-8 rounded-lg w-full flex items-center justify-center bg-muted">
+            <div className={styles.loader}>
               <Loader />
             </div>
           )}
           {!video && !isLoading && <Empty label="No video generated." />}
           {video && (
-            <video controls className="w-full aspect-video mt-8 rounded-lg border bg-black">
+            <video controls className={styles.video}>
               <source src={video} />
             </video>
           )}

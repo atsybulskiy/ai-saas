@@ -3,7 +3,7 @@ import { UserButton } from '@clerk/nextjs';
 import { MobileSidebar } from '@/components/MobileSidebar';
 import { getApiLimitCount } from '@/lib/api-limit';
 
-const Navbar = async () => {
+export const Navbar = async () => {
   const apiLimitCount = await getApiLimitCount();
   return (
     <div className={'flex items-center p-4'}>
@@ -14,5 +14,3 @@ const Navbar = async () => {
     </div>
   );
 };
-
-export default Navbar;
