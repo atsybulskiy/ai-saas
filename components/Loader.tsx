@@ -11,3 +11,5 @@ export const Loader = memo(() => {
     </div>
   );
 });
+
+Loader.displayName = 'Loader';
