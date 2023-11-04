@@ -23,6 +23,8 @@ export const checkSubscription = async () => {
     }
   });
 
+  console.log(userSubscription);
+
   if (!userSubscription) {
     return false;
   }
